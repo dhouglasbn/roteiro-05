@@ -39,13 +39,13 @@ public class StudentQueueTest {
 		
 		
 		// Fila circular com 3 elementos não cheia.
-//		queue3.enqueue(1);
-//		queue3.enqueue(2);
-//		queue3.enqueue(3);
+		queue3.enqueue(1);
+		queue3.enqueue(2);
+		queue3.enqueue(3);
 
 		// Fila circular com 2 elementos de tamanho 2. Fila cheia.
-//		queue4.enqueue(1);
-//		queue4.enqueue(2);
+		queue4.enqueue(1);
+		queue4.enqueue(2);
 		
 		// Fila de pilhas com 3 elementos não cheia.
 		queue5.enqueue(1);
@@ -79,6 +79,16 @@ public class StudentQueueTest {
 	@Test
 	public void testQueueImplHead() {
 		Integer expected = 1;
+		Integer result = queue1.head();
+		assertEquals(expected, result);
+	}
+	
+	
+	@Test
+	public void testQueueImplThirdHead() throws QueueUnderflowException {
+		queue1.dequeue();
+		queue1.dequeue();
+		Integer expected = 3;
 		Integer result = queue1.head();
 		assertEquals(expected, result);
 	}
@@ -203,11 +213,170 @@ public class StudentQueueTest {
 	// TESTES DA CIRCULAR QUEUE
 	
 	
+	@Test
+	public void testCircularQueueHead() {
+		Integer expected = 1;
+		Integer result = queue3.head();
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testCircularQueueThirdHead() throws QueueUnderflowException {
+		queue3.dequeue();
+		queue3.dequeue();
+		Integer expected = 3;
+		Integer result = queue3.head();
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testEmptyCircularQueueHead() {
+		try {
+			queue4.dequeue();
+			queue4.dequeue();			
+			assertNull(queue4.head());
+		} catch (QueueUnderflowException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testEmptyQueue8Head() {
+		assertNull(queue8.head());
+	}
+
+	@Test
+	public void testIsEmptyQueue3() {
+		assertFalse(queue3.isEmpty());
+	}
+	
+	@Test
+	public void testIsEmptyQueue4() {
+		assertFalse(queue4.isEmpty());
+	}
+	
+	@Test
+	public void testIsEmptyQueue8() {
+		assertTrue(queue8.isEmpty());
+	}
+
+	@Test
+	public void testIsFullQueue3() {
+		assertFalse(queue3.isFull());
+	}
+	
+	@Test
+	public void testIsFullQueue4() {
+		assertTrue(queue4.isFull());
+	}
+	
+	@Test
+	public void testIsFullQueue8() {
+		assertTrue(queue8.isFull());
+	}
+	
+	@Test
+	public void testOneElementIsntEmptyCircularQueue() {
+		try {
+			queue4.dequeue();
+			assertFalse(queue4.isEmpty());
+		} catch (QueueUnderflowException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testCircularEnqueue() {
+		try {
+			queue3.enqueue(new Integer(5));
+			assertTrue(queue3.isFull());
+		} catch (QueueOverflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testCircularEnqueueNullElement() {
+		try {
+			queue3.enqueue(null);
+			assertFalse(queue3.isFull());
+		} catch (QueueOverflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test(expected = QueueOverflowException.class)
+	public void testCircularEnqueueComErro() throws QueueOverflowException {
+		queue4.enqueue(new Integer(5)); // vai depender do tamanho que a fila
+										// foi iniciada!!!
+	}
+	
+	@Test(expected = QueueOverflowException.class)
+	public void testCircularEnqueueComErroQueue8() throws QueueOverflowException {
+		queue8.enqueue(new Integer(5)); // vai depender do tamanho que a fila
+										// foi iniciada!!!
+	}
+	
+	@Test(expected = QueueOverflowException.class)
+	public void testCircularEnqueueFullQueueAtMiddle() throws QueueOverflowException, 
+	QueueUnderflowException {
+		// Após 2 dequeues meu head vai para a posição 2
+		// A estratégia é dar enqueues para dar a volta no array
+		// e tentar dar enqueues por trás do head
+		// dando overflow quando o tail atingir o head
+		
+		queue3.dequeue();
+		queue3.dequeue();
+		queue3.enqueue(new Integer(4));
+		queue3.enqueue(new Integer(1));
+		queue3.enqueue(new Integer(2));
+		
+		// enqueue na posição 2 que estourará overflow
+		queue3.enqueue(new Integer(3));
+	}
+
+	@Test
+	public void testCircularDequeue() {
+		try {
+			assertEquals(new Integer(1), queue3.dequeue());
+			assertEquals(new Integer(2), queue3.head());
+		} catch (QueueUnderflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test(expected = QueueUnderflowException.class)
+	public void testCircularDequeueComErro() throws QueueUnderflowException {
+		queue3.dequeue(); // vai depender do
+		queue3.dequeue(); // tamanho que a fial
+		queue3.dequeue();
+		queue3.dequeue(); // foi iniciada!!!
+	}
+	
+	@Test(expected = QueueUnderflowException.class)
+	public void testCircularDequeueComErroQueue8() throws QueueUnderflowException {
+		queue8.dequeue(); // vai depender do
+						  // tamanho que a fial
+						  // foi iniciada!!!
+	}
+	
 	// TESTES DA QUEUE COM DUAS STACKS
 	
 	@Test
 	public void testStackQueueHead() {
 		Integer expected = 1;
+		Integer result = queue5.head();
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testStacksQueueThirdHead() throws QueueUnderflowException {
+		queue5.dequeue();
+		queue5.dequeue();
+		Integer expected = 3;
 		Integer result = queue5.head();
 		assertEquals(expected, result);
 	}
